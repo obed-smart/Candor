@@ -2,13 +2,12 @@ import { DataSource } from 'typeorm';
 import { WaitlistEntry } from '../modules/waitlist/waitlist.entity';
 import { env } from './env';
 
-
 console.log('Entity import check:', WaitlistEntry);
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
   url: env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
+  ssl: env.NODE_ENV === 'production' ? { rejectUnauthorized: true } : false,
   entities: [WaitlistEntry],
   migrations: ['src/migrations/*.ts'],
   synchronize: env.NODE_ENV === 'development',

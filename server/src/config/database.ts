@@ -10,28 +10,22 @@ const retry = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
  * @returns - (void)
  */
 
-
 export const connectDB = async (retries = 5): Promise<void> => {
   let attempt = 1;
-
-  console.log(
-  'Raw entities:',
-  AppDataSource.options.entities
-);
 
   while (retries > 0) {
     try {
       logger.info(`🔌 DB connection attempt ${attempt}...`);
 
-      if (!AppDataSource.initialize()) {
+      if (!AppDataSource.isInitialized) {
         await AppDataSource.initialize();
       }
 
       logger.info('Database Connected successfully');
 
-      const entityName = AppDataSource.entityMetadatas.map((meta) => meta.name);
+      const entityMeta = AppDataSource.entityMetadatas.map((meta) => meta.name);
 
-      logger.debug({ entityName }, 'Loaded entities');
+      logger.debug({ entityMeta }, 'Loaded entities');
 
       return;
     } catch (err) {
@@ -39,6 +33,11 @@ export const connectDB = async (retries = 5): Promise<void> => {
       attempt++;
 
       logger.error(`DB connection failed. Retries left: ${retries}`);
+
+      // 👇 important: destroy bad connection before retry
+      if (AppDataSource.isInitialized) {
+        await AppDataSource.destroy();
+      }
 
       if (retries === 0) {
         logger.fatal(`Database connection failed: ${err}`);
