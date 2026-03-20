@@ -15,7 +15,7 @@ app.use(cookieParser());
 
 app.use(globalRateLimiter);
 
-app.get('/', (req, res) => {
+app.get('/health', (req, res) => {
   res.status(200).json(ApiResponse.success(null, 'Api is running'));
 });
 

@@ -3,6 +3,8 @@ import logger from '../../shared/utils/logger';
 import { JoinWaitlistDto } from './waitlist.dto';
 import { WaitlistEntry } from './waitlist.entity';
 import WaitlistRepository from './waitlist.repository';
+import { sendEmail } from '../mail/email.services';
+import { waitlistTemplate } from '../mail/templates/waitlist.template';
 
 export default class WaitlistService {
   constructor(private readonly waitlistRepo: WaitlistRepository) {}
@@ -10,10 +12,17 @@ export default class WaitlistService {
   async addToWaitlist(data: JoinWaitlistDto): Promise<void> {
     const existing = await this.waitlistRepo.findByEmail(data.email);
     if (!existing) {
-      await this.waitlistRepo.create(data);
+      const user = await this.waitlistRepo.create(data);
 
+      const { subject, html } = waitlistTemplate(user.email);
 
-      // send email
+      sendEmail({
+        to: user.email,
+        subject,
+        html,
+      }).catch((err) => {
+        logger.error('Email failed', err);
+      });
     }
 
     return;
