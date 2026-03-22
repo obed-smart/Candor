@@ -1,4 +1,4 @@
-import logger from '../shared/utils/logger';
+import logger from '../shared/logger/logger';
 import { AppDataSource } from './data.source';
 
 // retry the db connect
@@ -11,6 +11,7 @@ const retry = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
  */
 
 export const connectDB = async (retries = 5): Promise<void> => {
+  
   let attempt = 1;
 
   while (retries > 0) {

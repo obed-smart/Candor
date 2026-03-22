@@ -84,3 +84,73 @@ export const waitlistTemplate = (email: string) => {
     html,
   };
 };
+
+export const adminWaitlistNotificationTemplate = (email: string) => {
+  const date = new Date().toLocaleString('en-NG', {
+    timeZone: 'Africa/Lagos',
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  });
+
+  const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Waitlist Entry</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f6f9; font-family: 'Segoe UI', Helvetica, Arial, sans-serif;">
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f6f9; padding: 40px 16px;">
+    <tr>
+      <td align="center">
+        <table width="520" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 10px; overflow: hidden; max-width: 520px; width: 100%; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+
+          <tr>
+            <td bgcolor="#050048" style="background:#050048; padding: 32px 40px; text-align: center;">
+              <p style="margin: 0 0 8px; color: #f0c040; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;">Internal Alert</p>
+              <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700;">New Waitlist Signup 🚀</h1>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding: 32px 40px;">
+              <div style="margin-bottom: 24px;">
+                <p style="margin: 0 0 4px; color: #b0bec5; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">User Email</p>
+                <p style="margin: 0; color: #050048; font-size: 18px; font-weight: 600; word-break: break-all;">
+                  ${email}
+                </p>
+              </div>
+
+              <div style="margin-bottom: 8px;">
+                <p style="margin: 0 0 4px; color: #b0bec5; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Signed Up At</p>
+                <p style="margin: 0; color: #2c3e50; font-size: 15px; line-height: 1.7;">
+                  ${date} (WAT)
+                </p>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding: 16px 40px 24px; text-align: center; border-top: 1px solid #e8edf2;">
+              <p style="margin: 0; color: #b0bec5; font-size: 12px;">
+                Candor Admin Notifications
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
+  `;
+
+  return {
+    subject: `⏳ New Waitlist: ${email}`,
+    html,
+  };
+};

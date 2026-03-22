@@ -13,9 +13,7 @@ export const JoinWaitlistDto = z
   })
   .refine(
     (data) => {
-      return [data.middleName, data.userName].every(
-        (field) => !field || field.trim() === '',
-      );
+      return !data.middleName?.trim() && !data.userName?.trim();
     },
     {
       message: 'invalid request',

@@ -17,6 +17,7 @@ const envSchema = z.object({
   EMAIL_USER: z.preprocess(emptyToUndefined, z.string()),
   EMAIL_HOST: z.preprocess(emptyToUndefined, z.string()),
   EMAIL_PASS: z.preprocess(emptyToUndefined, z.string()),
+  ADMIN_EMAIL: z.preprocess(emptyToUndefined, z.string()),
 });
 
 const parsed = envSchema.safeParse(process.env);
