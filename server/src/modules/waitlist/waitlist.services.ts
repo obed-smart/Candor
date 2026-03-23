@@ -1,19 +1,18 @@
-import AppError from '../../shared/utils/apiError';
-import logger from '../../shared/utils/logger';
+
 import { JoinWaitlistDto } from './waitlist.dto';
 import { WaitlistEntry } from './waitlist.entity';
 import WaitlistRepository from './waitlist.repository';
+import { sendWaitlistEmails } from '../mail/email.services';
 
 export default class WaitlistService {
   constructor(private readonly waitlistRepo: WaitlistRepository) {}
 
   async addToWaitlist(data: JoinWaitlistDto): Promise<void> {
     const existing = await this.waitlistRepo.findByEmail(data.email);
+    
     if (!existing) {
-      await this.waitlistRepo.create(data);
-
-
-      // send email
+      const user = await this.waitlistRepo.create(data);
+      sendWaitlistEmails(user.email);
     }
 
     return;

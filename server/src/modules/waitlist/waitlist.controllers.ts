@@ -3,7 +3,7 @@ import WaitlistService from './waitlist.services';
 import catchAsync from '../../shared/utils/catchAsync';
 import { ApiResponse } from '../../shared/utils/ApiResponse';
 import { WaitlistEntry } from './waitlist.entity';
-import logger from '../../shared/utils/logger';
+import logger from '../../shared/logger/logger';
 
 export class WaitlistController {
   constructor(private readonly waitlistService: WaitlistService) {}

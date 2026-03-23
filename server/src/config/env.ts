@@ -1,11 +1,9 @@
 import { z } from 'zod';
 
-
 const emptyToUndefined = (val: unknown) => (val === '' ? undefined : val);
 
 const envSchema = z.object({
   PORT: z.preprocess(emptyToUndefined, z.coerce.number().default(3000)),
-
 
   NODE_ENV: z
     .enum(['development', 'production', 'test'])
@@ -15,8 +13,12 @@ const envSchema = z.object({
     emptyToUndefined,
     z.url('DATABASE_URL must be a valid URL'),
   ),
+  EMAIL_PORT: z.preprocess(emptyToUndefined, z.coerce.number()),
+  EMAIL_USER: z.preprocess(emptyToUndefined, z.string()),
+  EMAIL_HOST: z.preprocess(emptyToUndefined, z.string()),
+  EMAIL_PASS: z.preprocess(emptyToUndefined, z.string()),
+  ADMIN_EMAIL: z.preprocess(emptyToUndefined, z.string()),
 });
-
 
 const parsed = envSchema.safeParse(process.env);
 

@@ -6,10 +6,10 @@ import {
   Index,
 } from 'typeorm';
 
-@Entity()
+@Entity('waitlist')
 export class WaitlistEntry {
-  @PrimaryGeneratedColumn()
-  id!: string;
+  @PrimaryGeneratedColumn('uuid')
+  id!: number;
 
   @Index({ unique: true })
   @Column({ type: 'varchar', length: 255 })
