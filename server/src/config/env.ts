@@ -1,36 +1,40 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-const emptyToUndefined = (val: unknown) => (val === '' ? undefined : val);
+const emptyToUndefined = (val: unknown) => (val === "" ? undefined : val);
 
 const envSchema = z.object({
-  PORT: z.preprocess(emptyToUndefined, z.coerce.number().default(3000)),
+    PORT: z.preprocess(emptyToUndefined, z.coerce.number().default(3000)),
 
-  NODE_ENV: z
-    .enum(['development', 'production', 'test'])
-    .default('development'),
+    NODE_ENV: z
+        .enum(["development", "production", "test"])
+        .default("development"),
 
-  DATABASE_URL: z.preprocess(
-    emptyToUndefined,
-    z.url('DATABASE_URL must be a valid URL'),
-  ),
-  EMAIL_PORT: z.preprocess(emptyToUndefined, z.coerce.number()),
-  EMAIL_USER: z.preprocess(emptyToUndefined, z.string()),
-  EMAIL_HOST: z.preprocess(emptyToUndefined, z.string()),
-  EMAIL_PASS: z.preprocess(emptyToUndefined, z.string()),
-  ADMIN_EMAIL: z.preprocess(emptyToUndefined, z.string()),
+    DATABASE_URL: z.preprocess(
+        emptyToUndefined,
+        z.url("DATABASE_URL must be a valid URL")
+    ),
+    EMAIL_PORT: z.preprocess(emptyToUndefined, z.coerce.number()),
+    EMAIL_USER: z.preprocess(emptyToUndefined, z.string()),
+    EMAIL_HOST: z.preprocess(emptyToUndefined, z.string()),
+    EMAIL_PASS: z.preprocess(emptyToUndefined, z.string()),
+    ADMIN_EMAIL: z.preprocess(emptyToUndefined, z.string()),
+    BASE_URL: z.preprocess(
+        emptyToUndefined,
+        z.url("BASE_URL must be a valid URL")
+    )
 });
 
 const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
-  console.error('❌ Invalid environment variables:\n');
+    console.error("❌ Invalid environment variables:\n");
 
-  for (const issue of parsed.error.issues) {
-    const errorField = issue.path.join('.') || 'root';
-    console.error(`❌ ${errorField}: ${issue.message}`);
-  }
+    for (const issue of parsed.error.issues) {
+        const errorField = issue.path.join(".") || "root";
+        console.error(`❌ ${errorField}: ${issue.message}`);
+    }
 
-  process.exit(1);
+    process.exit(1);
 }
 
 export const env = parsed.data;
